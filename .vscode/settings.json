@@ -64,4 +64,6 @@
             "statusBarLength": 10
         }
     },
+    "cmake.buildDirectory": "${workspaceFolder}/build/${variant:buildType}-${variant:Sanitizer}",
+    "cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
 }

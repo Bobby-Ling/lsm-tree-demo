@@ -14,14 +14,14 @@ class MemTable {
     explicit MemTable(std::size_t max_size = 4) : max_size(max_size) {}
 
     void set(const K &key, const std::optional<V> &value) {
-        LOG_DEBUG("MemTable::set key={}, value={}", key, value);
+        LOG_DEBUG("MemTable::set key={}, value={}", key, value.value());
         table[key] = value;
     }
 
     std::optional<V> get(const K &key) const {
         auto it = table.find(key);
         if (it != table.end()) {
-            LOG_DEBUG("MemTable::get key={}, found value={}", key, it->second);
+            LOG_DEBUG("MemTable::get key={}, found value={}", key, it->second.value());
             return it->second;
         }
         LOG_DEBUG("MemTable::get key={}, not found", key);

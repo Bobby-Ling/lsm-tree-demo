@@ -1,14 +1,14 @@
 #pragma once
 
-#include <list>
-#include <memory>
-#include <optional>
-
+#include "config.h"
 #include "log.h"
 #include "mem_table.h"
 #include "sst.h"
 #include "storage.h"
-#include "config.h"
+
+#include <list>
+#include <memory>
+#include <optional>
 
 template <typename K, typename V>
 class LSM {
@@ -32,21 +32,18 @@ class LSM {
             immutable_memtables.pop_front();
 
             ASSERT_FATAL(!oldest_memtable->empty());
-            SST<K, V> new_sst(*oldest_memtable, CONFIG::NUM_SST_ENTRY);
+            SST<K, V> new_sst(*oldest_memtable);
 
-            levels.add_sst(new_sst);
+            levels.add_sst_to_l0(std::move(new_sst));
             LOG_INFO("Added new SST to L0, now has {} SSTs", levels[0].get_sst_count());
         }
     }
-    void compact_levels();
-    void compact_level(std::size_t level_index);
-    bool needs_flush() const;
-    bool needs_compaction(std::size_t level_index) const;
-    std::size_t get_max_ssts(std::size_t level) const;
 
   public:
     LSM() : mem_table(std::make_unique<MemTable<K, V>>(CONFIG::NUM_MEM_ENTRY)),
-                     levels(CONFIG::NUM_LEVELS) {}
+            levels(CONFIG::NUM_LEVELS) {
+        LOG_INFO("LevelStorage: {}", this->levels);
+    }
 
     void set(const K &key, const V &value) {
         LOG_DEBUG("key={}, value={}", key, value);
@@ -87,7 +84,6 @@ class LSM {
         // 3. SST(从L0->Lmax)
         result = levels.get(key);
         if (result.has_value()) {
-            LOG_DEBUG("key={}, found in level {}", key, level.get_level_num());
             return result;
         }
 

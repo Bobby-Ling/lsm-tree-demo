@@ -1,4 +1,6 @@
 #pragma once
+#include <fmt/format.h>
+#include <fmt/std.h>
 #include "spdlog/logger.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include <exception>

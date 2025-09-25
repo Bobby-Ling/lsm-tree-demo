@@ -5,6 +5,9 @@ project(lsm_tree_demo)
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_COMMON_FLAGS "-Wall")
+set(CMAKE_COMMON_FLAGS "${CMAKE_COMMON_FLAGS} -ftemplate-backtrace-limit=0")
+set(CMAKE_COMMON_FLAGS "${CMAKE_COMMON_FLAGS} -fmacro-backtrace-limit=0")
+set(CMAKE_COMMON_FLAGS "${CMAKE_COMMON_FLAGS} -ferror-limit=0")
 
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
